@@ -18,3 +18,7 @@ FULL_COUNTRY_LIST =\
      'rw', 'pr', 'bw', 'gq', 'cv', 'mc', 'ne', 'tg', 'bi', 'sy', 'tt',
      'cd', 'sb', 'mz', 'mm', 'tj', 'tw', 'gu', 'cg', 'gl', 'nz', 'mv',
      'ps', 'tm', 'ag', 'ad', 'sr']
+
+def get_ctry_full_feature_list():
+    """return a list of all the country features."""
+    return ["ctry_{}".format(x) for x in FULL_COUNTRY_LIST]

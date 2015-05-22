@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 # sklearn
 from sklearn.ensemble import RandomForestClassifier
@@ -10,7 +11,8 @@ from sklearn.externals import joblib
 
 # this project
 from basemodel import BaseModel
-
+import submission
+import fit_features
 
 class rfClf(BaseModel):
 
@@ -36,15 +38,15 @@ class rfClf(BaseModel):
         random_state = kwargs.get('random_state', 24)
 
         self.learner = RandomForestClassifier(n_estimators=n_estimators,
-                                                   max_depth=max_depth,
-                                                   bootstrap=bootstrap,
-                                                   min_samples_leaf=min_samples_leaf,
-                                                   min_samples_split=min_samples_split,
-                                                   max_features=max_features,
-                                                   n_jobs=n_jobs,
-                                                   verbose=verbose,
-                                                   class_weight=class_weight,
-                                                   random_state=random_state)
+                                              max_depth=max_depth,
+                                              bootstrap=bootstrap,
+                                              min_samples_leaf=min_samples_leaf,
+                                              min_samples_split=min_samples_split,
+                                              max_features=max_features,
+                                              n_jobs=n_jobs,
+                                              verbose=verbose,
+                                              class_weight=class_weight,
+                                              random_state=random_state)
         print('\n\nRandom forest set with parameters:')
         par_dict = self.learner.get_params()
         for ipar in par_dict.keys():
@@ -108,10 +110,12 @@ class rfClf(BaseModel):
         # Plots
 
         # Feature importances
+        maxfeat2show = 30 # number of features to show in plots
         importances = self.learner.feature_importances_
         std = np.std([tree.feature_importances_ for tree in self.learner.estimators_],
                     axis=0)
         indices = np.argsort(importances)[::-1]
+        indices = indices[:min(maxfeat2show, len(indices))]  # truncate if > maxfeat2show
         ordered_names = [col2fit[i] for i in indices]
 
         fig_import = plt.figure(figsize=(10, 10))
@@ -141,7 +145,8 @@ class rfClf(BaseModel):
         # ROC curve
         false_pos, true_pos, thr = roc_curve(target_test, predictions)
         fig_roc = plt.figure()
-        plt.plot(false_pos, true_pos, label='ROC curve (area = %0.2f)' % auc(false_pos, true_pos))
+        plt.plot(false_pos, true_pos,
+                 label='ROC curve (area = %0.2f)' % auc(false_pos, true_pos))
         plt.plot([0, 1], [0, 1], 'k--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
@@ -153,6 +158,53 @@ class rfClf(BaseModel):
 
         raw_input('press enter when finished...')
 
+    def submit(self, **kwargs):
+        """Prepare submission file"""
+
+        col2fit = kwargs.get('features')
+        bids_path = kwargs.get('bids_path', 'data/bids.csv')
+        test_path = kwargs.get('test_path', 'data/test.csv')
+
+        # cleaning
+        if not self.iscleaned:
+            print 'Preparing the data...'
+            self.prepare_data(bids_path, **kwargs)
+        print('columns for fit=\n{}'.format(self.df_train.columns))
+
+        # Fit Classifier
+        self.fitModel(self.df_train[col2fit].values,
+                      self.df_train['outcome'].values, **kwargs)
+
+        # Prepare test sample
+        df_test = pd.read_csv(test_path)
+        all_bidders = df_test['bidder_id']
+        print(df_test.columns)
+        df_test = self.prepare_dataframe(df_test, bids_path,
+                                         ignore_clean=True,
+                                         features=col2fit)
+
+        # Predict on the test sample
+        print('\nPredicting...')
+        predictions = self.learner.predict(df_test[col2fit].values)
+
+        # Write submission
+        fsubname = 'submission.csv'
+        fsub = open(fsubname, 'w')
+        fsub.write('bidder_id,prediction\n')
+        predicted = []
+        for ibidder, ipred in zip(df_test.index, predictions):
+            fsub.write('{},{}\n'.format(ibidder, ipred))
+            predicted.append(ibidder)
+        # Now fill the unpredicted as non-robot
+        for iunpredicted_bidder in (set(all_bidders) - set(predicted)):
+            fsub.write('{},0.0\n'.format(iunpredicted_bidder))
+        fsub.close()
+
+        # check validation file
+        if not submission.is_submission_ok(fsubname):
+            print('\n\n!!!!ERROR with the submission file!')
+            return
+        print('Ready to submit the file {}'.format(fsubname))
 
 
 if __name__ == "__main__":
@@ -163,6 +215,12 @@ if __name__ == "__main__":
     #print(a.df_train.head())
     #a.set_model()
     #a.fitNscore(features = ['nbids', 'lfit_m', 'lfit_b'], nbids_rows=100000)
-    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'ctry_ru']
+    feat_list = ['nbids', 'lfit_m', 'lfit_b']
+    #sub_country_list= feat_list.extend(fit_features.get_ctry_full_feature_list())
+    #sub_country_list = ["ctry_{}".format(x) for x in ['id','au','uk','my','us','th','sg','za','in','fr']]
+    sub_country_list = ['ctry_in', ]
+    feat_list.extend(sub_country_list)
     #a.fitNscore(features = feat_list, nbids_rows=10000)
-    a.fitNscore(features = feat_list)
+    #a.fitNscore(features = feat_list)
+    #a.submit(features = feat_list, nbids_rows=100000)
+    a.submit(features = feat_list)
