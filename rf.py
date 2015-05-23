@@ -27,7 +27,7 @@ class rfClf(BaseModel):
         No criterion parameters since only one choice: mean sqared error
         """
         verbose = kwargs.get('verbose', 0)
-        n_estimators = kwargs.get('n_estimators', 50)
+        n_estimators = kwargs.get('n_estimators', 80)
         max_depth = kwargs.get('maxdepth', None)
         bootstrap = kwargs.get('bootstrap', True)
         min_samples_leaf = kwargs.get('min_samples_leaf', 1)
@@ -223,6 +223,21 @@ if __name__ == "__main__":
     # This list has the most frequency disparity between robot-nonrobot
     sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
     feat_list.extend(sub_phone_list)
+    sub_merch_list = fit_features.get_merch_full_feature_list()
+    feat_list.extend(sub_merch_list)
+    sub_url_list= ["url_{}".format(x) for x in ['vasstdc27m7nks3',
+                                                'lacduz3i6mjlfkd',
+                                                '4dd8ei0o5oqsua3',
+                                                'hzsvpefhf94rnlb',
+                                                'ds6j090wqr4tmmf',
+                                                'vwjvx8n5d6yjwlj',
+                                                'xosquuqcro853d7',
+                                                '96ky12gxeqflpwz',
+                                                '1bltvi87id7pau1',
+                                                'g2sohb92odayedy']]
+    #feat_list.extend(sub_url_list)
+    feat_list.extend(['url_vasstdc27m7nks3',])
+    feat_list.append('ipspl1_165')
     #a.fitNscore(features = feat_list, nbids_rows=100000)
     a.fitNscore(features = feat_list)
     #a.submit(features = feat_list, nbids_rows=1000)

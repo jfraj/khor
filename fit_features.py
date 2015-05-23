@@ -19,6 +19,45 @@ FULL_COUNTRY_LIST =\
      'cd', 'sb', 'mz', 'mm', 'tj', 'tw', 'gu', 'cg', 'gl', 'nz', 'mv',
      'ps', 'tm', 'ag', 'ad', 'sr']
 
+MERCHANDISE_LIST = ['jewelry', 'furniture', 'home goods', 'mobile',
+                    'sporting goods', 'office equipment', 'computers',
+                    'books and music', 'clothing', 'auto parts']
+
+
 def get_ctry_full_feature_list():
-    """return a list of all the country features."""
+    """Return a list of all the country features."""
     return ["ctry_{}".format(x) for x in FULL_COUNTRY_LIST]
+
+
+def get_merchandise_rename_dict(**kwargs):
+    """return a dictionary mapping csv merchandise name to feature name
+
+    The feature name is intended to be more friendly
+    Format:
+    {merchandise: feature_name}
+
+    if kwarg inverted = True the dictionary is inverted:
+    {feature_name : merchandise}
+    """
+    inverted = kwargs.get('inverted', False)
+
+    feat_dict = {}
+    merch_dict = {}
+    for imerch in MERCHANDISE_LIST:
+        ifeat_name = "mer_{}".format(imerch[:4])
+        assert(ifeat_name not in feat_dict.values())
+        feat_dict[imerch] = ifeat_name
+        merch_dict[ifeat_name] = imerch
+    if inverted:
+        return merch_dict
+    return feat_dict
+
+
+def get_merch_full_feature_list():
+    """Return list of all merchandise features."""
+    return get_merchandise_rename_dict().values()
+
+if __name__ == "__main__":
+    print(get_merchandise_rename_dict())
+    print(get_merchandise_rename_dict(inverted=True))
+    print(get_merch_full_feature_list())

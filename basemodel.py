@@ -88,6 +88,55 @@ class BaseModel(object):
         df[cat_name].fillna(0, inplace=True)
         return df
 
+    def fill_merch_categories(self, df, df_bids, merch, **kwargs):
+        """Fill the merchandise type category"""
+        verbose = kwargs.get('verbose', False)
+        merch_dict = fit_features.get_merchandise_rename_dict(inverted=True)
+        if verbose:
+            print('adding {}'.format(merch))
+        cat_name = merch
+        merch_counts = df_bids[df_bids['merchandise']==merch_dict[merch]].groupby(["bidder_id"]).size()
+        df = pd.concat([df, merch_counts.to_frame(name=cat_name)],
+                       axis=1, join_axes=[df.index])
+        df[cat_name].fillna(0, inplace=True)
+        return df
+
+    def fill_url_categories(self, df, df_bids, url, **kwargs):
+        """Fill the url type category"""
+        verbose = kwargs.get('verbose', False)
+        if verbose:
+            print('adding {}'.format(url))
+        cat_name = url
+        url_counts = df_bids[df_bids['url']==url[4:]].groupby(["bidder_id"]).size()
+        df = pd.concat([df, url_counts.to_frame(name=cat_name)],
+                       axis=1, join_axes=[df.index])
+        df[cat_name].fillna(0, inplace=True)
+        return df
+
+    def fill_phone_categories(self, df, df_bids, phone, **kwargs):
+        """Fill the phone type category"""
+        verbose = kwargs.get('verbose', False)
+        if verbose:
+            print('adding {}'.format(phone))
+        cat_name = phone
+        phone_counts = df_bids[df_bids['device']==phone].groupby(["bidder_id"]).size()
+        df = pd.concat([df, phone_counts.to_frame(name=cat_name)],
+                       axis=1, join_axes=[df.index])
+        df[cat_name].fillna(0, inplace=True)
+        return df
+
+    def fill_ipsplit_categories(self, df, df_bids, ipspl, **kwargs):
+        """Fill the sub ip address category"""
+        verbose = kwargs.get('verbose', False)
+        if verbose:
+            print('adding {}'.format(ipspl))
+        cat_name = ipspl
+        ipspl_counts = df_bids[df_bids[ipspl[:6]]==ipspl[7:]].groupby(["bidder_id"]).size()
+        df = pd.concat([df, ipspl_counts.to_frame(name=cat_name)],
+                       axis=1, join_axes=[df.index])
+        df[cat_name].fillna(0, inplace=True)
+        return df
+
 
     def fill_features_from_bids(self, df, df_bids, **kwargs):
         """Fill self.df_train with features for fitting."""
@@ -138,9 +187,44 @@ class BaseModel(object):
             for iphone in features:
                 if iphone.find('phone') != 0:
                     continue
-                print('filling phone')
-                df = self.fill_phone_categories(df, df_bids,
-                                                iphone, verbose=True)
+                print('filling {}'.format(iphone))
+                df = self.fill_phone_categories(df, df_bids, iphone)
+
+        if features == 'all' or any("mer_" in s for s in features):
+            if verbose:
+                print('Adding merchandise features')
+            for imerch in features:
+                if imerch.find('mer_') != 0:
+                    continue
+                print('filling {}'.format(imerch))
+                df = self.fill_merch_categories(df, df_bids, imerch)
+
+        if features == 'all' or any("url_" in s for s in features):
+            if verbose:
+                print('Adding url features')
+            for iurl in features:
+                if iurl.find('url_') != 0:
+                    continue
+                print('filling {}'.format(iurl))
+                df = self.fill_url_categories(df, df_bids,
+                                                iurl, verbose=True)
+
+        if features == 'all' or any("ipspl" in s for s in features):
+            if verbose:
+                print('Splitting ip addresses to create new columns')
+            df_bids['ipspl1'],df_bids['ipspl2'],df_bids['ipspl3'],df_bids['ipspl4']=\
+                zip(*df_bids["ip"].apply(lambda x: x.split('.')))
+
+        if features == 'all' or any("ipspl1_" in s for s in features):
+            if verbose:
+                print('Adding ip split 1 features')
+            for ispl1 in features:
+                if ispl1.find('ipspl1_') != 0:
+                    continue
+                print('filling {}'.format(ispl1))
+                df = self.fill_ipsplit_categories(df, df_bids,
+                                                ispl1, verbose=True)
+
 
         return df
 
@@ -191,7 +275,9 @@ if __name__ == "__main__":
     bids_path = os.path.join(data_dir, 'bids.csv')
     a = BaseModel(train_path)
     #a.df_train = a.prepare_data(a.df_train, bids_path)
-    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'ctry_us', 'phone4']
-    a.prepare_data(bids_path, features=feat_list, nbids_rows=10000)
+    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'ctry_us', 'phone4',
+                 'mer_offi', 'url_vasstdc27m7nks3', 'ipspl1_105']
+    #a.prepare_data(bids_path, features=feat_list, nbids_rows=10000)
+    a.prepare_data(bids_path, features=feat_list)
     #a.df_train = a.prepare_data(a.df_train, bids_path, nbids_rows=10000)
     print(a.df_train.head())
