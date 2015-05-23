@@ -220,7 +220,10 @@ if __name__ == "__main__":
     #sub_country_list = ["ctry_{}".format(x) for x in ['id','au','uk','my','us','th','sg','za','in','fr']]
     sub_country_list = ['ctry_in', ]
     feat_list.extend(sub_country_list)
-    #a.fitNscore(features = feat_list, nbids_rows=10000)
-    #a.fitNscore(features = feat_list)
-    #a.submit(features = feat_list, nbids_rows=100000)
-    a.submit(features = feat_list)
+    # This list has the most frequency disparity between robot-nonrobot
+    sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
+    feat_list.extend(sub_phone_list)
+    #a.fitNscore(features = feat_list, nbids_rows=100000)
+    a.fitNscore(features = feat_list)
+    #a.submit(features = feat_list, nbids_rows=1000)
+    #a.submit(features = feat_list)
