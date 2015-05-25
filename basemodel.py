@@ -76,18 +76,6 @@ class BaseModel(object):
         df[cat_name].fillna(0, inplace=True)
         return df
 
-    def fill_phone_categories(self, df, df_bids, phone, **kwargs):
-        """Fill the phone type category"""
-        verbose = kwargs.get('verbose', False)
-        if verbose:
-            print('adding {}'.format(phone))
-        cat_name = phone
-        phone_counts = df_bids[df_bids['device']==phone].groupby(["bidder_id"]).size()
-        df = pd.concat([df, phone_counts.to_frame(name=cat_name)],
-                       axis=1, join_axes=[df.index])
-        df[cat_name].fillna(0, inplace=True)
-        return df
-
     def fill_merch_categories(self, df, df_bids, merch, **kwargs):
         """Fill the merchandise type category"""
         verbose = kwargs.get('verbose', False)
@@ -109,6 +97,18 @@ class BaseModel(object):
         cat_name = url
         url_counts = df_bids[df_bids['url']==url[4:]].groupby(["bidder_id"]).size()
         df = pd.concat([df, url_counts.to_frame(name=cat_name)],
+                       axis=1, join_axes=[df.index])
+        df[cat_name].fillna(0, inplace=True)
+        return df
+
+    def fill_auction_categories(self, df, df_bids, auction, **kwargs):
+        """Fill the url type category"""
+        verbose = kwargs.get('verbose', False)
+        if verbose:
+            print('adding {}'.format(auction))
+        cat_name = auction
+        auc_counts = df_bids[df_bids['auction']==auction[4:]].groupby(["bidder_id"]).size()
+        df = pd.concat([df, auc_counts.to_frame(name=cat_name)],
                        axis=1, join_axes=[df.index])
         df[cat_name].fillna(0, inplace=True)
         return df
@@ -209,6 +209,16 @@ class BaseModel(object):
                 df = self.fill_url_categories(df, df_bids,
                                                 iurl, verbose=True)
 
+        if features == 'all' or any("auc_" in s for s in features):
+            if verbose:
+                print('Adding auction features')
+            for iauc in features:
+                if iauc.find('auc_') != 0:
+                    continue
+                print('filling {}'.format(iurl))
+                df = self.fill_auction_categories(df, df_bids,
+                                                iauc, verbose=True)
+
         if features == 'all' or any("ipspl" in s for s in features):
             if verbose:
                 print('Splitting ip addresses to create new columns')
@@ -276,7 +286,7 @@ if __name__ == "__main__":
     a = BaseModel(train_path)
     #a.df_train = a.prepare_data(a.df_train, bids_path)
     feat_list = ['nbids', 'lfit_m', 'lfit_b', 'ctry_us', 'phone4',
-                 'mer_offi', 'url_vasstdc27m7nks3', 'ipspl1_105']
+                 'mer_offi', 'url_vasstdc27m7nks3', 'ipspl1_105', 'auc_lx0hm']
     #a.prepare_data(bids_path, features=feat_list, nbids_rows=10000)
     a.prepare_data(bids_path, features=feat_list)
     #a.df_train = a.prepare_data(a.df_train, bids_path, nbids_rows=10000)

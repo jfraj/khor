@@ -222,7 +222,8 @@ if __name__ == "__main__":
     feat_list.extend(sub_country_list)
     # This list has the most frequency disparity between robot-nonrobot
     sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
-    feat_list.extend(sub_phone_list)
+    #feat_list.extend(sub_phone_list)
+    feat_list.append('phone46')
     sub_merch_list = fit_features.get_merch_full_feature_list()
     feat_list.extend(sub_merch_list)
     sub_url_list= ["url_{}".format(x) for x in ['vasstdc27m7nks3',
@@ -236,8 +237,9 @@ if __name__ == "__main__":
                                                 '1bltvi87id7pau1',
                                                 'g2sohb92odayedy']]
     #feat_list.extend(sub_url_list)
-    feat_list.extend(['url_vasstdc27m7nks3',])
+    feat_list.append('url_vasstdc27m7nks3')
     feat_list.append('ipspl1_165')
+    feat_list.append('auc_jqx39')
     #a.fitNscore(features = feat_list, nbids_rows=100000)
     a.fitNscore(features = feat_list)
     #a.submit(features = feat_list, nbids_rows=1000)

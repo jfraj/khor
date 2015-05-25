@@ -48,5 +48,5 @@ def get_freq_diff(param, **kwargs):
 
 
 if __name__ == "__main__":
-    #get_freq_diff('ipspl1', nbid_rows=10000)
-    get_freq_diff('ipspl1')
+    #get_freq_diff('auction', nbid_rows=10000)
+    get_freq_diff('auction')
