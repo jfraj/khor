@@ -23,6 +23,9 @@ MERCHANDISE_LIST = ['jewelry', 'furniture', 'home goods', 'mobile',
                     'sporting goods', 'office equipment', 'computers',
                     'books and music', 'clothing', 'auto parts']
 
+test2  = ['nbids', 'lfit_m', 'lfit_b',
+          'url_vasstdc27m7nks3', 'ipspl1_165', 'auc_jqx39']
+
 
 def get_ctry_full_feature_list():
     """Return a list of all the country features."""
@@ -56,6 +59,7 @@ def get_merchandise_rename_dict(**kwargs):
 def get_merch_full_feature_list():
     """Return list of all merchandise features."""
     return get_merchandise_rename_dict().values()
+
 
 if __name__ == "__main__":
     print(get_merchandise_rename_dict())

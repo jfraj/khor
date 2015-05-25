@@ -7,12 +7,12 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_curve, auc
-from sklearn.externals import joblib
 
 # this project
 from basemodel import BaseModel
 import submission
 import fit_features
+import hyperparams
 
 class rfClf(BaseModel):
 
@@ -27,14 +27,15 @@ class rfClf(BaseModel):
         No criterion parameters since only one choice: mean sqared error
         """
         verbose = kwargs.get('verbose', 0)
-        n_estimators = kwargs.get('n_estimators', 80)
-        max_depth = kwargs.get('maxdepth', None)
+        n_estimators = kwargs.get('n_estimators', 200)
+        max_depth = kwargs.get('max_depth', None)
         bootstrap = kwargs.get('bootstrap', True)
         min_samples_leaf = kwargs.get('min_samples_leaf', 1)
         min_samples_split = kwargs.get('min_samples_split', 2)
         max_features = kwargs.get('max_features', "auto")
         class_weight = kwargs.get('class_weight', "auto")
         n_jobs = kwargs.get('n_jobs', 1)
+        criterion = kwargs.get('criterion', 'entropy')
         random_state = kwargs.get('random_state', 24)
 
         self.learner = RandomForestClassifier(n_estimators=n_estimators,
@@ -45,6 +46,7 @@ class rfClf(BaseModel):
                                               max_features=max_features,
                                               n_jobs=n_jobs,
                                               verbose=verbose,
+                                              criterion=criterion,
                                               class_weight=class_weight,
                                               random_state=random_state)
         print('\n\nRandom forest set with parameters:')
@@ -79,7 +81,7 @@ class rfClf(BaseModel):
             self.prepare_data(bids_path, **kwargs)
         print('columns for fit=\n{}'.format(self.df_train.columns))
 
-        test_size = 0.3  # fraction kept for testing
+        test_size = 0.2  # fraction kept for testing
         rnd_seed = 24  # for reproducibility
 
         features_train, features_test, target_train, target_test =\
@@ -94,6 +96,7 @@ class rfClf(BaseModel):
         # Predict on the rest of the sample
         print('\nPredicting...')
         predictions = self.learner.predict(features_test)
+        probas = self.learner.predict_proba(features_test)
 
         # Feature index ordered by importance
         ord_idx = np.argsort(self.learner.feature_importances_)
@@ -143,7 +146,8 @@ class rfClf(BaseModel):
         fig_cm.show()
 
         # ROC curve
-        false_pos, true_pos, thr = roc_curve(target_test, predictions)
+        #false_pos, true_pos, thr = roc_curve(target_test, predictions)
+        false_pos, true_pos, thr = roc_curve(target_test, probas[:, 1])
         fig_roc = plt.figure()
         plt.plot(false_pos, true_pos,
                  label='ROC curve (area = %0.2f)' % auc(false_pos, true_pos))
@@ -159,8 +163,7 @@ class rfClf(BaseModel):
         raw_input('press enter when finished...')
 
     def submit(self, **kwargs):
-        """Prepare submission file"""
-
+        """Prepare submission file."""
         col2fit = kwargs.get('features')
         bids_path = kwargs.get('bids_path', 'data/bids.csv')
         test_path = kwargs.get('test_path', 'data/test.csv')
@@ -240,7 +243,9 @@ if __name__ == "__main__":
     feat_list.append('url_vasstdc27m7nks3')
     feat_list.append('ipspl1_165')
     feat_list.append('auc_jqx39')
-    #a.fitNscore(features = feat_list, nbids_rows=100000)
-    a.fitNscore(features = feat_list)
+    param_dic = {}
+    #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
+    #a.fitNscore(features = feat_list)
     #a.submit(features = feat_list, nbids_rows=1000)
     #a.submit(features = feat_list)
+    a.submit(features = fit_features.test2, **hyperparams.rf_params['test2'])

@@ -290,6 +290,6 @@ if __name__ == "__main__":
     feat_list = ['nbids', 'lfit_m', 'lfit_b', 'ctry_us', 'phone4',
                  'mer_offi', 'url_vasstdc27m7nks3', 'ipspl1_105', 'auc_lx0hm']
     #a.prepare_data(bids_path, features=feat_list, nbids_rows=10000)
-    a.prepare_data(bids_path, features=feat_list)
+    #a.prepare_data(bids_path, features=feat_list)
     #a.df_train = a.prepare_data(a.df_train, bids_path, nbids_rows=10000)
     print(a.df_train.head())

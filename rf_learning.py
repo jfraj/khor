@@ -8,6 +8,7 @@ from sklearn import grid_search
 from sklearn.learning_curve import learning_curve
 
 from rf import rfClf
+import hyperparams
 
 
 class clf_learning(rfClf):
@@ -21,6 +22,7 @@ class clf_learning(rfClf):
         nsizes = kwargs.get('nsizes', 8)
         waitNshow = kwargs.get('waitNshow', True)
         cv = kwargs.get('waitNshow', 5)
+        n_jobs = kwargs.get('n_jobs', 1)
 
         col2fit = kwargs.get('features')
         # cleaning
@@ -38,7 +40,7 @@ class clf_learning(rfClf):
         print 'training will be performed on the following sizes'
         print train_sizes
 
-        n_jobs = 1
+        #n_jobs = 1
         print '\n\nlearning with njobs = {}\n...\n'.format(n_jobs)
 
         self.set_model(**kwargs)
@@ -102,7 +104,9 @@ class clf_learning(rfClf):
                       "criterion": ["gini", "entropy"],
                       "max_features": [1.0, 0.8, 0.6, 0.4, 0.2, 0.1],
                       "min_samples_leaf": sp_randint(1, 25),
-                      "bootstrap": [True, False]}
+                      "min_samples_split": sp_randint(1, 25),
+                      "bootstrap": [True, False],
+                      "class_weight": [None, "auto"]}
 
         if not self.iscleaned:
             print 'Preparing the data...'
@@ -148,6 +152,6 @@ if __name__ == "__main__":
     #a.learn_curve('precision', nbids_rows=1000, features=feat_list)
     #a.learn_curve('roc_auc', nbids_rows=100000, features=feat_list)
     #a.learn_curve(nbids_rows=1000000, features=feat_list)
-    #a.learn_curve("roc_auc",features=feat_list)
+    a.learn_curve(None, n_jobs=5, features=feat_list, **hyperparams.rf_params['test2'])
     #a.grid_search(nbids_rows=10000, features=feat_list)
-    a.grid_search(features=feat_list)
+    #a.grid_search(features=feat_list, n_iter=100, n_jobs=6, n_estimators=3000)
