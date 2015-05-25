@@ -246,6 +246,8 @@ class BaseModel(object):
         nbids_rows = kwargs.get('nbids_rows', None)  # All by default
         features = kwargs.get('features', 'all')
         verbose = kwargs.get('verbose', True)
+        if verbose and nbids_rows is not None:
+            print 'preparing datafram with {} rows'.format(nbids_rows)
         df_bids = pd.read_csv(bids_fname, nrows=nbids_rows)
 
         # Exclude rows that have no bids
