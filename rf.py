@@ -24,6 +24,7 @@ class rfClf(BaseModel):
 
     def set_model(self, **kwargs):
         """Set the classifier.
+
         No criterion parameters since only one choice: mean sqared error
         """
         verbose = kwargs.get('verbose', 0)
@@ -71,8 +72,7 @@ class rfClf(BaseModel):
         print('Done fitting!')
 
     def fitNscore(self, **kwargs):
-        """Fit classifier and produce score and related plots"""
-
+        """Fit classifier and produce score and related plots."""
         col2fit = kwargs.get('features')
         # cleaning
         bids_path = kwargs.get('bids_path', 'data/bids.csv')
@@ -146,8 +146,9 @@ class rfClf(BaseModel):
         fig_cm.show()
 
         # ROC curve
-        #false_pos, true_pos, thr = roc_curve(target_test, predictions)
-        false_pos, true_pos, thr = roc_curve(target_test, probas[:, 1])
+        # This ones seems to reflect better the LB score
+        false_pos, true_pos, thr = roc_curve(target_test, predictions)
+        #false_pos, true_pos, thr = roc_curve(target_test, probas[:, 1])
         fig_roc = plt.figure()
         plt.plot(false_pos, true_pos,
                  label='ROC curve (area = %0.2f)' % auc(false_pos, true_pos))
@@ -212,7 +213,9 @@ class rfClf(BaseModel):
 
 if __name__ == "__main__":
     #a = rfClf("data/train.csv", nrows=100)
-    a = rfClf("data/train.csv")
+    #a = rfClf("data/train.csv")
+    a = rfClf(saved_pkl='saved_df/test2.pkl')
+    #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
     #a.prepare_data(a.df_train, 'data/bids.csv', nbids_rows=100000)
     #a.prepare_data(a.df_train, 'data/bids.csv')
     #print(a.df_train.head())
@@ -248,4 +251,4 @@ if __name__ == "__main__":
     #a.fitNscore(features = feat_list)
     #a.submit(features = feat_list, nbids_rows=1000)
     #a.submit(features = feat_list)
-    a.submit(features = fit_features.test2, **hyperparams.rf_params['test2'])
+    #a.submit(features = fit_features.test2, **hyperparams.rf_params['test2'])

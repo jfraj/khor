@@ -267,13 +267,27 @@ class BaseModel(object):
         return df
 
     def prepare_data(self, bids_fname, **kwargs):
-        """Prepare this class' object for fitting"""
+        """Prepare this class' object for fitting."""
         self.df_train = self.prepare_dataframe(self.df_train,
                                                bids_fname, **kwargs)
         self.iscleaned = True
 
+    def prepareNsave(self, col2save, **kwargs):
+        """Clean and prepare data and save pickle it."""
+        save_name = kwargs.get('save_name', 'saved_df/default.pkl')
+        bids_fname = kwargs.get('bids_fname', 'data/bids.csv')
+        print('\nWill prepare and save the following column')
+        print(col2save)
+        print('\nFrom the bids file: {}'.format(bids_fname))
+        print('\nPreparing the data...')
+        self.prepare_data(bids_fname, features = col2save, **kwargs)
+        print('Pickling dataframe...')
+        self.df_train.to_pickle(save_name)
+        print('columns saved: {}'.format(self.df_train.columns))
+        print('Done saving dataframe in {}'.format(save_name))
+
     def show_feature(self, feature):
-        """Plot the given feature"""
+        """Plot the given feature."""
         fig = plt.figure()
         self.df_train[feature].hist()
         fig.show()
@@ -292,4 +306,5 @@ if __name__ == "__main__":
     #a.prepare_data(bids_path, features=feat_list, nbids_rows=10000)
     #a.prepare_data(bids_path, features=feat_list)
     #a.df_train = a.prepare_data(a.df_train, bids_path, nbids_rows=10000)
-    print(a.df_train.head())
+    #print(a.df_train.head())
+    a.prepareNsave(fit_features.test2, save_name='saved_df/test2.pkl')
