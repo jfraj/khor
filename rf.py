@@ -151,9 +151,10 @@ class rfClf(BaseModel):
 
 if __name__ == "__main__":
     #a = rfClf("data/train.csv", nrows=100)
-    #a = rfClf("data/train.csv")
-    a = rfClf(saved_pkl='saved_df/test4.pkl')
-    a.fitNscore(features = fit_features.test4, **hyperparams.rf_params['test4'])
+    a = rfClf("data/train.csv")
+    #a = rfClf(saved_pkl='saved_df/test4.pkl')
+    #a.fitNscore(features = fit_features.test4, **hyperparams.rf_params['test4'])
+    a.fitNscore(features = fit_features.test5, **hyperparams.rf_params['test4'])
     #a.prepare_data(a.df_train, 'data/bids.csv', nbids_rows=100000)
     #a.prepare_data(a.df_train, 'data/bids.csv')
     #print(a.df_train.head())

@@ -31,6 +31,7 @@ class gbClf(BaseModel):
         min_samples_split = kwargs.get('min_samples_split', 2)
         max_features = kwargs.get('max_features', None)
         learning_rate = kwargs.get('learning_rate', 0.1)
+        subsample = kwargs.get('subsample', 1.0)
         random_state = kwargs.get('random_state', 24)
 
         self.learner = GradientBoostingClassifier(n_estimators=n_estimators,
@@ -124,9 +125,10 @@ class gbClf(BaseModel):
         # This ones seems to reflect better the LB score
         false_pos, true_pos, thr = roc_curve(target_test, predictions)
         #false_pos, true_pos, thr = roc_curve(target_test, probas[:, 1])
+        roc_auc = auc(false_pos, true_pos)
         fig_roc = plt.figure()
         plt.plot(false_pos, true_pos,
-                 label='ROC curve (area = %0.2f)' % auc(false_pos, true_pos))
+                 label='ROC curve (area = %0.2f)' % roc_auc)
         plt.plot([0, 1], [0, 1], 'k--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
@@ -135,6 +137,7 @@ class gbClf(BaseModel):
         plt.title('ROC')
         plt.legend(loc="lower right")
         fig_roc.show()
+        print('ROC_AUC = {}'.format(roc_auc))
 
 
         raw_input('press enter when finished...')
@@ -159,5 +162,6 @@ if __name__ == "__main__":
     #feat_list.append('ipspl1_165')
     #feat_list.append('auc_jqx39')
     #a.fitNscore(features = feat_list, **hyperparams.gb_params['test3'])
-    a.fitNscore(features = fit_features.test4, **hyperparams.gb_params['test4'])
+    #a.fitNscore(features = fit_features.test4, **hyperparams.gb_params['test4'])
     #a.submit(features = feat_list)
+    a.submit(features = fit_features.test4, **hyperparams.gb_params['test4'])

@@ -170,11 +170,12 @@ class BaseModel(object):
         if features == 'all' or any("lfit" in s for s in features):
             if verbose:
                 print('Adding linear fit related values')
-            df['lfit_m'], df['lfit_b'] =\
-                zip(*df['bidtimes'].apply(clean.get_linearfit_features))
+            #df['lfit_m'], df['lfit_b'], df['lfit_r'] = zip(*df['bidtimes'].apply(clean.get_linearfit_features))
+            df['lfit_m'], df['lfit_b'],df['lfit_r'] = zip(*df['bidtimes'].apply(clean.get_linearfit_features))
             # replace nan with -1
             df.loc[:, 'lfit_b'].fillna(-1, inplace=True)
-            df.loc[:, 'lfit_b'].fillna(-1, inplace=True)
+            df.loc[:, 'lfit_m'].fillna(-1, inplace=True)
+            df.loc[:, 'lfit_r'].fillna(-1, inplace=True)
 
         if features == 'all' or any("ctry" in s for s in features):
             if verbose:
@@ -368,8 +369,8 @@ if __name__ == "__main__":
     bids_path = os.path.join(data_dir, 'bids.csv')
     a = BaseModel(train_path)
     #a.df_train = a.prepare_data(a.df_train, bids_path)
-    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'ctry_us', 'phone4',
-                 'mer_offi', 'url_vasstdc27m7nks3', 'ipspl1_105', 'auc_lx0hm']
+    #feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lift_r','ctry_us', 'phone4',
+    #             'mer_offi', 'url_vasstdc27m7nks3', 'ipspl1_105', 'auc_lx0hm']
     #a.prepare_data(bids_path, features=feat_list, nbids_rows=10000)
     #a.prepare_data(bids_path, features=feat_list)
     #a.df_train = a.prepare_data(a.df_train, bids_path, nbids_rows=10000)

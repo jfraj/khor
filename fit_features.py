@@ -28,6 +28,10 @@ test2 = ['nbids', 'lfit_m', 'lfit_b',
 
 test3 = ['nbids', 'lfit_m', 'lfit_b', 'phone62']
 
+test5 = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+         'url_vasstdc27m7nks3', 'ipspl1_165',
+         'auc_jqx39', 'phone62']
+
 
 def get_ctry_full_feature_list():
     """Return a list of all the country features."""
@@ -62,7 +66,7 @@ def get_merch_full_feature_list():
     """Return list of all merchandise features."""
     return get_merchandise_rename_dict().values()
 
-test4 = []
+test4 = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r']
 test4.extend(get_ctry_full_feature_list())
 test4.extend(get_merch_full_feature_list())
 sub_url_list= ["url_{}".format(x) for x in ['vasstdc27m7nks3',
@@ -76,6 +80,8 @@ sub_url_list= ["url_{}".format(x) for x in ['vasstdc27m7nks3',
                                             '1bltvi87id7pau1',
                                             'g2sohb92odayedy']]
 test4.extend(sub_url_list)
+sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
+test4.extend(sub_phone_list)
 test4.append('ipspl1_165')
 test4.append('auc_jqx39')
 

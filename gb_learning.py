@@ -79,4 +79,4 @@ if __name__ == "__main__":
     #feat_list = ['nbids', 'lfit_m', 'lfit_b']
     #feat_list.append("phone62")
     feat_list = fit_features.test4
-    a.grid_search(score="precision", features=feat_list, n_iter=100, n_jobs=6, n_estimators=3000)
+    a.grid_search(score="precision", features=feat_list, n_iter=100, n_jobs=7, n_estimators=3000)
