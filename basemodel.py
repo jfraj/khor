@@ -286,6 +286,21 @@ class BaseModel(object):
         print('columns saved: {}'.format(self.df_train.columns))
         print('Done saving dataframe in {}'.format(save_name))
 
+    def fitModel(self, values2fit, targets, **kwargs):
+        """Fit the Classifier."""
+        if self.fitted:
+            print('Already fitted...')
+            return
+        # Classifier
+        self.set_model(**kwargs)
+
+        print('Fitting on values with shape:')
+        print(values2fit.shape)
+        print('\nFitting...')
+        self.learner.fit(values2fit, targets)
+        self.fitted = True
+        print('Done fitting!')
+
     def show_feature(self, feature):
         """Plot the given feature."""
         fig = plt.figure()

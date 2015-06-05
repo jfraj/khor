@@ -56,21 +56,6 @@ class rfClf(BaseModel):
             print('{}: {}'.format(ipar, par_dict[ipar]))
         print('\n\n')
 
-    def fitModel(self, values2fit, targets, **kwargs):
-        """Fit the Classifier."""
-        if self.fitted:
-            print('Already fitted...')
-            return
-        # Classifier
-        self.set_model(**kwargs)
-
-        print('Fitting on values with shape:')
-        print(values2fit.shape)
-        print('\nFitting...')
-        self.learner.fit(values2fit, targets)
-        self.fitted = True
-        print('Done fitting!')
-
     def fitNscore(self, **kwargs):
         """Fit classifier and produce score and related plots."""
         col2fit = kwargs.get('features')
@@ -215,7 +200,7 @@ if __name__ == "__main__":
     #a = rfClf("data/train.csv", nrows=100)
     #a = rfClf("data/train.csv")
     a = rfClf(saved_pkl='saved_df/test2.pkl')
-    #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
+    a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
     #a.prepare_data(a.df_train, 'data/bids.csv', nbids_rows=100000)
     #a.prepare_data(a.df_train, 'data/bids.csv')
     #print(a.df_train.head())
