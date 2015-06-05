@@ -8,10 +8,13 @@ from sklearn.externals import joblib
 # This project
 import clean
 import fit_features
+import submission
 
 
 class BaseModel(object):
+
     """Contain members and function for all trainers."""
+
     def __init__(self, train_data_fname=None, nrows=None, **kwargs):
         """Turn data in pandas dataframe."""
         verbose = kwargs.get('verbose', True)
@@ -301,12 +304,61 @@ class BaseModel(object):
         self.fitted = True
         print('Done fitting!')
 
+    def submit(self, **kwargs):
+        """Prepare submission file."""
+        col2fit = kwargs.get('features')
+        bids_path = kwargs.get('bids_path', 'data/bids.csv')
+        test_path = kwargs.get('test_path', 'data/test.csv')
+
+        # cleaning
+        if not self.iscleaned:
+            print 'Preparing the data...'
+            self.prepare_data(bids_path, **kwargs)
+        print('columns for fit=\n{}'.format(self.df_train.columns))
+
+        # Fit Classifier
+        self.fitModel(self.df_train[col2fit].values,
+                      self.df_train['outcome'].values, **kwargs)
+
+        # Prepare test sample
+        df_test = pd.read_csv(test_path)
+        all_bidders = df_test['bidder_id']
+        print(df_test.columns)
+        df_test = self.prepare_dataframe(df_test, bids_path,
+                                         ignore_clean=True,
+                                         features=col2fit)
+
+        # Predict on the test sample
+        print('\nPredicting...')
+        predictions = self.learner.predict(df_test[col2fit].values)
+
+        # Write submission
+        fsubname = 'submission.csv'
+        fsub = open(fsubname, 'w')
+        fsub.write('bidder_id,prediction\n')
+        predicted = []
+        for ibidder, ipred in zip(df_test.index, predictions):
+            fsub.write('{},{}\n'.format(ibidder, ipred))
+            predicted.append(ibidder)
+        # Now fill the unpredicted as non-robot
+        for iunpredicted_bidder in (set(all_bidders) - set(predicted)):
+            fsub.write('{},0.0\n'.format(iunpredicted_bidder))
+        fsub.close()
+
+        # check validation file
+        if not submission.is_submission_ok(fsubname):
+            print('\n\n!!!!ERROR with the submission file!')
+            return
+        print('Ready to submit the file {}'.format(fsubname))
+
+
     def show_feature(self, feature):
         """Plot the given feature."""
         fig = plt.figure()
         self.df_train[feature].hist()
         fig.show()
         raw_input("press enter when finished...")
+
 
 if __name__ == "__main__":
     import os

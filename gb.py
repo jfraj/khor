@@ -25,14 +25,12 @@ class gbClf(BaseModel):
     def set_model(self, **kwargs):
         """Set the classifier."""
         verbose = kwargs.get('verbose', 0)
-        n_estimators = kwargs.get('n_estimators', 100)
+        n_estimators = kwargs.get('n_estimators', 3000)
         max_depth = kwargs.get('max_depth', 3)
         min_samples_leaf = kwargs.get('min_samples_leaf', 1)
         min_samples_split = kwargs.get('min_samples_split', 2)
         max_features = kwargs.get('max_features', None)
-
         learning_rate = kwargs.get('learning_rate', True)
-
         random_state = kwargs.get('random_state', 24)
 
         self.learner = GradientBoostingClassifier(n_estimators=n_estimators,
@@ -143,8 +141,21 @@ class gbClf(BaseModel):
 
 
 if __name__ == "__main__":
-    #a = rfClf("data/train.csv", nrows=100)
-    #a = rfClf("data/train.csv")
-    a = gbClf(saved_pkl='saved_df/test2.pkl')
+    #a = gbClf("data/train.csv", nrows=100)
+    a = gbClf("data/train.csv")
+    #a = gbClf(saved_pkl='saved_df/test2.pkl')
     #a.set_model()
-    a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
+    #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
+    feat_list = ['nbids', 'lfit_m', 'lfit_b']
+    sub_country_list = ['ctry_us', ]
+    #sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
+    sub_phone_list= ["phone62",]
+    sub_merch_list = ["mer_mobi"]
+    feat_list.extend(sub_country_list)
+    feat_list.extend(sub_phone_list)
+    feat_list.extend(sub_merch_list)
+    feat_list.append('url_vasstdc27m7nks3')
+    feat_list.append('ipspl1_165')
+    feat_list.append('auc_jqx39')
+    a.fitNscore(features = feat_list)
+    #a.submit(features = feat_list)
