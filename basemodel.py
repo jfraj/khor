@@ -374,4 +374,5 @@ if __name__ == "__main__":
     #a.prepare_data(bids_path, features=feat_list)
     #a.df_train = a.prepare_data(a.df_train, bids_path, nbids_rows=10000)
     #print(a.df_train.head())
-    a.prepareNsave(fit_features.test2, save_name='saved_df/test2.pkl')
+    #a.prepareNsave(fit_features.test2, save_name='saved_df/test2.pkl')
+    a.prepareNsave(fit_features.test4, save_name='saved_df/test4.pkl')

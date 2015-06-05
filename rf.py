@@ -107,7 +107,7 @@ class rfClf(BaseModel):
         ordered_names = [col2fit[i] for i in indices]
 
         fig_import = plt.figure(figsize=(10, 10))
-        plt.title("Feature importances, reg")
+        plt.title("Feature importances, RF")
         plt.barh(range(len(indices)), importances[indices],
                 color="b", xerr=std[indices], align="center",ecolor='r')
         plt.yticks(range(len(indices)), ordered_names)
@@ -124,7 +124,7 @@ class rfClf(BaseModel):
         fig_cm = plt.figure()
         ax_cm = fig_cm.add_subplot(1,1,1)
         im_cm = ax_cm.imshow(cm_normalized, interpolation='nearest')
-        plt.title('Normalized confusion mtx, reg')
+        plt.title('Normalized confusion mtx, RF')
         plt.xlabel('Predicted')
         plt.ylabel('True')
         fig_cm.colorbar(im_cm)
@@ -148,59 +148,12 @@ class rfClf(BaseModel):
 
         raw_input('press enter when finished...')
 
-    def submit(self, **kwargs):
-        """Prepare submission file."""
-        col2fit = kwargs.get('features')
-        bids_path = kwargs.get('bids_path', 'data/bids.csv')
-        test_path = kwargs.get('test_path', 'data/test.csv')
-
-        # cleaning
-        if not self.iscleaned:
-            print 'Preparing the data...'
-            self.prepare_data(bids_path, **kwargs)
-        print('columns for fit=\n{}'.format(self.df_train.columns))
-
-        # Fit Classifier
-        self.fitModel(self.df_train[col2fit].values,
-                      self.df_train['outcome'].values, **kwargs)
-
-        # Prepare test sample
-        df_test = pd.read_csv(test_path)
-        all_bidders = df_test['bidder_id']
-        print(df_test.columns)
-        df_test = self.prepare_dataframe(df_test, bids_path,
-                                         ignore_clean=True,
-                                         features=col2fit)
-
-        # Predict on the test sample
-        print('\nPredicting...')
-        predictions = self.learner.predict(df_test[col2fit].values)
-
-        # Write submission
-        fsubname = 'submission.csv'
-        fsub = open(fsubname, 'w')
-        fsub.write('bidder_id,prediction\n')
-        predicted = []
-        for ibidder, ipred in zip(df_test.index, predictions):
-            fsub.write('{},{}\n'.format(ibidder, ipred))
-            predicted.append(ibidder)
-        # Now fill the unpredicted as non-robot
-        for iunpredicted_bidder in (set(all_bidders) - set(predicted)):
-            fsub.write('{},0.0\n'.format(iunpredicted_bidder))
-        fsub.close()
-
-        # check validation file
-        if not submission.is_submission_ok(fsubname):
-            print('\n\n!!!!ERROR with the submission file!')
-            return
-        print('Ready to submit the file {}'.format(fsubname))
-
 
 if __name__ == "__main__":
     #a = rfClf("data/train.csv", nrows=100)
     #a = rfClf("data/train.csv")
-    a = rfClf(saved_pkl='saved_df/test2.pkl')
-    a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
+    a = rfClf(saved_pkl='saved_df/test4.pkl')
+    a.fitNscore(features = fit_features.test4, **hyperparams.rf_params['test4'])
     #a.prepare_data(a.df_train, 'data/bids.csv', nbids_rows=100000)
     #a.prepare_data(a.df_train, 'data/bids.csv')
     #print(a.df_train.head())

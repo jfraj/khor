@@ -23,8 +23,10 @@ MERCHANDISE_LIST = ['jewelry', 'furniture', 'home goods', 'mobile',
                     'sporting goods', 'office equipment', 'computers',
                     'books and music', 'clothing', 'auto parts']
 
-test2  = ['nbids', 'lfit_m', 'lfit_b',
-          'url_vasstdc27m7nks3', 'ipspl1_165', 'auc_jqx39']
+test2 = ['nbids', 'lfit_m', 'lfit_b',
+         'url_vasstdc27m7nks3', 'ipspl1_165', 'auc_jqx39']
+
+test3 = ['nbids', 'lfit_m', 'lfit_b', 'phone62']
 
 
 def get_ctry_full_feature_list():
@@ -60,8 +62,25 @@ def get_merch_full_feature_list():
     """Return list of all merchandise features."""
     return get_merchandise_rename_dict().values()
 
+test4 = []
+test4.extend(get_ctry_full_feature_list())
+test4.extend(get_merch_full_feature_list())
+sub_url_list= ["url_{}".format(x) for x in ['vasstdc27m7nks3',
+                                            'lacduz3i6mjlfkd',
+                                            '4dd8ei0o5oqsua3',
+                                            'hzsvpefhf94rnlb',
+                                            'ds6j090wqr4tmmf',
+                                            'vwjvx8n5d6yjwlj',
+                                            'xosquuqcro853d7',
+                                            '96ky12gxeqflpwz',
+                                            '1bltvi87id7pau1',
+                                            'g2sohb92odayedy']]
+test4.extend(sub_url_list)
+test4.append('ipspl1_165')
+test4.append('auc_jqx39')
 
 if __name__ == "__main__":
-    print(get_merchandise_rename_dict())
-    print(get_merchandise_rename_dict(inverted=True))
-    print(get_merch_full_feature_list())
+    #print(get_merchandise_rename_dict())
+    #print(get_merchandise_rename_dict(inverted=True))
+    #print(get_merch_full_feature_list())
+    print(test4)

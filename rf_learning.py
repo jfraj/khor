@@ -9,16 +9,15 @@ from sklearn.learning_curve import learning_curve
 
 from rf import rfClf
 import hyperparams
+import fit_features
 
 
 class clf_learning(rfClf):
-    """
-    Class that will contain learning functions
-    """
+
+    """Class that will contain learning functions."""
+
     def learn_curve(self, score='roc_auc', **kwargs):
-        """
-        Plots the learning curve
-        """
+        """Plot the learning curve."""
         nsizes = kwargs.get('nsizes', 8)
         waitNshow = kwargs.get('waitNshow', True)
         cv = kwargs.get('waitNshow', 5)
@@ -106,7 +105,7 @@ class clf_learning(rfClf):
                       "min_samples_leaf": sp_randint(1, 25),
                       "min_samples_split": sp_randint(1, 25),
                       "bootstrap": [True, False],
-                      "class_weight": [None, "auto"]}
+                      "class_weight": [None, "auto", "subsample"]}
 
         if not self.iscleaned:
             print 'Preparing the data...'
@@ -143,15 +142,17 @@ class clf_learning(rfClf):
 
 
 if __name__ == "__main__":
-    a = clf_learning("data/train.csv")
-    feat_list = ['nbids', 'lfit_m', 'lfit_b']
-    feat_list.append('url_vasstdc27m7nks3')
-    feat_list.append('ipspl1_165')
-    feat_list.append('auc_jqx39')
+    #a = clf_learning("data/train.csv")
+    a = clf_learning(saved_pkl='saved_df/test4.pkl')
+    #feat_list = ['nbids', 'lfit_m', 'lfit_b']
+    #feat_list.append('url_vasstdc27m7nks3')
+    #feat_list.append('ipspl1_165')
+    #feat_list.append('auc_jqx39')
+    feat_list = fit_features.test4
 
     #a.learn_curve('precision', nbids_rows=1000, features=feat_list)
     #a.learn_curve('roc_auc', nbids_rows=100000, features=feat_list)
     #a.learn_curve(nbids_rows=1000000, features=feat_list)
-    a.learn_curve(None, n_jobs=5, features=feat_list, **hyperparams.rf_params['test2'])
+    #a.learn_curve(None, n_jobs=5, features=feat_list, **hyperparams.rf_params['test2'])
     #a.grid_search(nbids_rows=10000, features=feat_list)
-    #a.grid_search(features=feat_list, n_iter=100, n_jobs=6, n_estimators=3000)
+    a.grid_search(score="precision", features=feat_list, n_iter=100, n_jobs=6, n_estimators=3000)

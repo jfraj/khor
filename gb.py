@@ -30,7 +30,7 @@ class gbClf(BaseModel):
         min_samples_leaf = kwargs.get('min_samples_leaf', 1)
         min_samples_split = kwargs.get('min_samples_split', 2)
         max_features = kwargs.get('max_features', None)
-        learning_rate = kwargs.get('learning_rate', True)
+        learning_rate = kwargs.get('learning_rate', 0.1)
         random_state = kwargs.get('random_state', 24)
 
         self.learner = GradientBoostingClassifier(n_estimators=n_estimators,
@@ -41,7 +41,7 @@ class gbClf(BaseModel):
                                                   max_features=max_features,
                                                   verbose=verbose,
                                                   random_state=random_state)
-        print('\n\nRandom forest set with parameters:')
+        print('\n\nGradient Boosting set with parameters:')
         par_dict = self.learner.get_params()
         for ipar in par_dict.keys():
             print('{}: {}'.format(ipar, par_dict[ipar]))
@@ -142,20 +142,22 @@ class gbClf(BaseModel):
 
 if __name__ == "__main__":
     #a = gbClf("data/train.csv", nrows=100)
-    a = gbClf("data/train.csv")
+    #a = gbClf("data/train.csv")
     #a = gbClf(saved_pkl='saved_df/test2.pkl')
+    a = gbClf(saved_pkl='saved_df/test4.pkl')
     #a.set_model()
     #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
     feat_list = ['nbids', 'lfit_m', 'lfit_b']
-    sub_country_list = ['ctry_us', ]
+    #sub_country_list = ['ctry_us', ]
     #sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
     sub_phone_list= ["phone62",]
-    sub_merch_list = ["mer_mobi"]
-    feat_list.extend(sub_country_list)
+    #sub_merch_list = ["mer_mobi"]
+    #feat_list.extend(sub_country_list)
     feat_list.extend(sub_phone_list)
-    feat_list.extend(sub_merch_list)
-    feat_list.append('url_vasstdc27m7nks3')
-    feat_list.append('ipspl1_165')
-    feat_list.append('auc_jqx39')
-    a.fitNscore(features = feat_list)
+    #feat_list.extend(sub_merch_list)
+    #feat_list.append('url_vasstdc27m7nks3')
+    #feat_list.append('ipspl1_165')
+    #feat_list.append('auc_jqx39')
+    #a.fitNscore(features = feat_list, **hyperparams.gb_params['test3'])
+    a.fitNscore(features = fit_features.test4, **hyperparams.gb_params['test4'])
     #a.submit(features = feat_list)
