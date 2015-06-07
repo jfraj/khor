@@ -158,9 +158,23 @@ class BaseModel(object):
             print('Creating list of bids for each bidders')
         by_bidders = df_bids.groupby('bidder_id')
         df['bidtimes'] =\
-            by_bidders['time'].apply(lambda x: x.tolist())
+            by_bidders['time'].apply(lambda x: (x/52631578.95).tolist())
+        #df['bidtimes'] =\
+        #    by_bidders['time'].apply(lambda x: (x).tolist())
         df['bidtimes'] =\
             df['bidtimes'].apply(lambda x: [x, ] if type(x) is float else x)
+
+        if verbose:
+            print('FFT on bidtimes...')
+        df['fft_cent'], df['fft_freq_std']  =\
+            zip(*df['bidtimes'].apply(clean.get_fft_features))
+            #df['bidtimes'].apply(clean.get_fft_features)
+
+        if features == 'all' or any("fft_linfit" in s for s in features):
+            if verbose:
+                print('Adding number of bids')
+            df['nbids'] =\
+                df['bidtimes'].apply(lambda x: np.count_nonzero(~np.isnan(x)))
 
         if features == 'all' or any("nbids" in s for s in features):
             if verbose:

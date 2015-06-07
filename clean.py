@@ -1,4 +1,5 @@
 import numpy as np
+#from scipy import fft, arange
 
 
 #import warnings
@@ -17,6 +18,18 @@ def get_linearfit_features(val_list):
         res = -1
     return fit_tup[0], fit_tup[1], res
 
+def get_fft_features(bidtimes):
+    """Return basic features extracted from fft of the bid list"""
+    ntimes=len(bidtimes)
+    magnitudes = np.abs(np.fft.rfft(bidtimes)/ntimes)
+    freqs = np.abs(np.fft.fftfreq(ntimes, 1.0)[:ntimes//2+1])
+    cent = np.sum(magnitudes*freqs) / np.sum(magnitudes)
+    freq_std = np.std(freqs)
+    return cent, freq_std
+
+
 if __name__ == "__main__":
-    print(get_linearfit_features([-1, 0.3, 2.1, 3.2, 4.3, 5.4, 5.2, 100000,1000000]))
+    time_list = [-1, 0.3, 2.1, 3.2, 4.3, 5.4, 5.2, 100000,1000000]
+    #print(get_linearfit_features(time_list))
     #print(get_linearfit_features([1, 2]))
+    print(get_fft_features(time_list))
