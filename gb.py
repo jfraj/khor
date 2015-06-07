@@ -145,23 +145,25 @@ class gbClf(BaseModel):
 
 if __name__ == "__main__":
     #a = gbClf("data/train.csv", nrows=100)
-    #a = gbClf("data/train.csv")
+    a = gbClf("data/train.csv")
     #a = gbClf(saved_pkl='saved_df/test2.pkl')
-    a = gbClf(saved_pkl='saved_df/test4.pkl')
+    #a = gbClf(saved_pkl='saved_df/test4.pkl')
     #a.set_model()
     #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
-    feat_list = ['nbids', 'lfit_m', 'lfit_b']
+    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+                 'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62']
+    #feat_list = ['nbids', 'lfit_m', 'lfit_b']
     #sub_country_list = ['ctry_us', ]
     #sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
-    sub_phone_list= ["phone62",]
+    #sub_phone_list= ["phone62",]
     #sub_merch_list = ["mer_mobi"]
     #feat_list.extend(sub_country_list)
-    feat_list.extend(sub_phone_list)
+    #feat_list.extend(sub_phone_list)
     #feat_list.extend(sub_merch_list)
     #feat_list.append('url_vasstdc27m7nks3')
     #feat_list.append('ipspl1_165')
     #feat_list.append('auc_jqx39')
     #a.fitNscore(features = feat_list, **hyperparams.gb_params['test3'])
-    #a.fitNscore(features = fit_features.test4, **hyperparams.gb_params['test4'])
-    #a.submit(features = feat_list)
-    a.submit(features = fit_features.test4, **hyperparams.gb_params['test4'])
+    a.fitNscore(features = fit_features.test6, **hyperparams.gb_params['test6'])
+    #a.fitNscore(features = feat_list, n_estimators=10000)
+    #a.submit(features = fit_features.test6, **hyperparams.gb_params['test6'])

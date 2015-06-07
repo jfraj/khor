@@ -164,23 +164,18 @@ class BaseModel(object):
         df['bidtimes'] =\
             df['bidtimes'].apply(lambda x: [x, ] if type(x) is float else x)
 
-        if verbose:
-            print('FFT on bidtimes...')
-        df['fft_cent'], df['fft_freq_std']  =\
-            zip(*df['bidtimes'].apply(clean.get_fft_features))
-            #df['bidtimes'].apply(clean.get_fft_features)
-
-        if features == 'all' or any("fft_linfit" in s for s in features):
+        if features == 'all' or any("fft" in s for s in features):
             if verbose:
-                print('Adding number of bids')
-            df['nbids'] =\
-                df['bidtimes'].apply(lambda x: np.count_nonzero(~np.isnan(x)))
+                print('FFT features...')
+            df['fft_cent'], df['fft_freq_std'], df['fft_sflat'], df['fft_ptp'] =\
+                zip(*df['bidtimes'].apply(clean.get_fft_features))
 
         if features == 'all' or any("nbids" in s for s in features):
             if verbose:
                 print('Adding number of bids')
             df['nbids'] =\
                 df['bidtimes'].apply(lambda x: np.count_nonzero(~np.isnan(x)))
+
         if features == 'all' or any("lfit" in s for s in features):
             if verbose:
                 print('Adding linear fit related values')
@@ -385,9 +380,11 @@ if __name__ == "__main__":
     #a.df_train = a.prepare_data(a.df_train, bids_path)
     #feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lift_r','ctry_us', 'phone4',
     #             'mer_offi', 'url_vasstdc27m7nks3', 'ipspl1_105', 'auc_lx0hm']
-    #a.prepare_data(bids_path, features=feat_list, nbids_rows=10000)
+    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'fft_cent']
+    #a.prepare_data(bids_path, features=feat_list, nbids_rows=1000)
     #a.prepare_data(bids_path, features=feat_list)
     #a.df_train = a.prepare_data(a.df_train, bids_path, nbids_rows=10000)
     #print(a.df_train.head())
     #a.prepareNsave(fit_features.test2, save_name='saved_df/test2.pkl')
-    a.prepareNsave(fit_features.test4, save_name='saved_df/test4.pkl')
+    #a.prepareNsave(fit_features.test4, save_name='saved_df/test4.pkl')
+    a.prepareNsave(feat_list, save_name='saved_df/deleteme.pkl')

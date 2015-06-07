@@ -85,6 +85,10 @@ test4.extend(sub_phone_list)
 test4.append('ipspl1_165')
 test4.append('auc_jqx39')
 
+test6 = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+         'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62']
+
+
 if __name__ == "__main__":
     #print(get_merchandise_rename_dict())
     #print(get_merchandise_rename_dict(inverted=True))

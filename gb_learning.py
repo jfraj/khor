@@ -74,9 +74,9 @@ class clf_learning(gbClf):
         print('Best params = {}\n\n'.format(rf_grid.best_params_))
 
 if __name__ == "__main__":
-    #a = clf_learning("data/train.csv")
-    a = clf_learning(saved_pkl='saved_df/test4.pkl')
+    a = clf_learning("data/train.csv")
+    #a = clf_learning(saved_pkl='saved_df/test4.pkl')
     #feat_list = ['nbids', 'lfit_m', 'lfit_b']
     #feat_list.append("phone62")
-    feat_list = fit_features.test4
+    feat_list = fit_features.test6
     a.grid_search(score="precision", features=feat_list, n_iter=100, n_jobs=7, n_estimators=3000)

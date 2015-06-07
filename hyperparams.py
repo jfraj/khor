@@ -28,3 +28,8 @@ gb_params['test5'] = {'learning_rate': 0.02, 'min_samples_leaf': 5,
                      'subsample':1.0,'min_samples_split': 19,
                      'max_features': 0.4, 'max_depth': 15,
                      'n_estimators': 30000}
+
+gb_params['test6'] = {'learning_rate':0.01 , 'min_samples_leaf': 1,
+                     'subsample':0.1,'min_samples_split': 13,
+                     'max_features': 0.1, 'max_depth': 13,
+                     'n_estimators': 30000}

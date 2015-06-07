@@ -1,6 +1,6 @@
 import numpy as np
 #from scipy import fft, arange
-
+from scipy import stats as scistats
 
 #import warnings
 #warnings.simplefilter('ignore', np.RankWarning)
@@ -24,8 +24,8 @@ def get_fft_features(bidtimes):
     magnitudes = np.abs(np.fft.rfft(bidtimes)/ntimes)
     freqs = np.abs(np.fft.fftfreq(ntimes, 1.0)[:ntimes//2+1])
     cent = np.sum(magnitudes*freqs) / np.sum(magnitudes)
-    freq_std = np.std(freqs)
-    return cent, freq_std
+    spectral_flatness = scistats.gmean(magnitudes)/np.mean(magnitudes)
+    return cent, np.std(freqs), spectral_flatness, np.ptp(magnitudes)
 
 
 if __name__ == "__main__":

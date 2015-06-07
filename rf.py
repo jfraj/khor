@@ -152,42 +152,9 @@ class rfClf(BaseModel):
 if __name__ == "__main__":
     #a = rfClf("data/train.csv", nrows=100)
     a = rfClf("data/train.csv")
-    #a = rfClf(saved_pkl='saved_df/test4.pkl')
-    #a.fitNscore(features = fit_features.test4, **hyperparams.rf_params['test4'])
-    a.fitNscore(features = fit_features.test5, **hyperparams.rf_params['test4'])
-    #a.prepare_data(a.df_train, 'data/bids.csv', nbids_rows=100000)
-    #a.prepare_data(a.df_train, 'data/bids.csv')
-    #print(a.df_train.head())
-    #a.set_model()
-    #a.fitNscore(features = ['nbids', 'lfit_m', 'lfit_b'], nbids_rows=100000)
-    feat_list = ['nbids', 'lfit_m', 'lfit_b']
-    #sub_country_list= feat_list.extend(fit_features.get_ctry_full_feature_list())
-    #sub_country_list = ["ctry_{}".format(x) for x in ['id','au','uk','my','us','th','sg','za','in','fr']]
-    sub_country_list = ['ctry_in', ]
-    feat_list.extend(sub_country_list)
-    # This list has the most frequency disparity between robot-nonrobot
-    sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
-    #feat_list.extend(sub_phone_list)
-    feat_list.append('phone46')
-    sub_merch_list = fit_features.get_merch_full_feature_list()
-    feat_list.extend(sub_merch_list)
-    sub_url_list= ["url_{}".format(x) for x in ['vasstdc27m7nks3',
-                                                'lacduz3i6mjlfkd',
-                                                '4dd8ei0o5oqsua3',
-                                                'hzsvpefhf94rnlb',
-                                                'ds6j090wqr4tmmf',
-                                                'vwjvx8n5d6yjwlj',
-                                                'xosquuqcro853d7',
-                                                '96ky12gxeqflpwz',
-                                                '1bltvi87id7pau1',
-                                                'g2sohb92odayedy']]
-    #feat_list.extend(sub_url_list)
-    feat_list.append('url_vasstdc27m7nks3')
-    feat_list.append('ipspl1_165')
-    feat_list.append('auc_jqx39')
-    param_dic = {}
-    #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
-    #a.fitNscore(features = feat_list)
+    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+                 'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62']
+    a.fitNscore(features = feat_list, n_estimators=10000)
     #a.submit(features = feat_list, nbids_rows=1000)
     #a.submit(features = feat_list)
     #a.submit(features = fit_features.test2, **hyperparams.rf_params['test2'])
