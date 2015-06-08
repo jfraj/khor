@@ -142,17 +142,17 @@ class clf_learning(rfClf):
 
 
 if __name__ == "__main__":
-    #a = clf_learning("data/train.csv")
-    a = clf_learning(saved_pkl='saved_df/test4.pkl')
+    a = clf_learning("data/train.csv")
+    #a = clf_learning(saved_pkl='saved_df/test4.pkl')
     #feat_list = ['nbids', 'lfit_m', 'lfit_b']
     #feat_list.append('url_vasstdc27m7nks3')
     #feat_list.append('ipspl1_165')
     #feat_list.append('auc_jqx39')
-    feat_list = fit_features.test4
+    feat_list = fit_features.test8
 
     #a.learn_curve('precision', nbids_rows=1000, features=feat_list)
     #a.learn_curve('roc_auc', nbids_rows=100000, features=feat_list)
     #a.learn_curve(nbids_rows=1000000, features=feat_list)
     #a.learn_curve(None, n_jobs=5, features=feat_list, **hyperparams.rf_params['test2'])
     #a.grid_search(nbids_rows=10000, features=feat_list)
-    a.grid_search(score="precision", features=feat_list, n_iter=100, n_jobs=6, n_estimators=3000)
+    a.grid_search(score="precision", features=feat_list, n_iter=150, n_jobs=7, n_estimators=5000)

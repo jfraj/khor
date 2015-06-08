@@ -78,5 +78,5 @@ if __name__ == "__main__":
     #a = clf_learning(saved_pkl='saved_df/test4.pkl')
     #feat_list = ['nbids', 'lfit_m', 'lfit_b']
     #feat_list.append("phone62")
-    feat_list = fit_features.test7
-    a.grid_search(score="precision", features=feat_list, n_iter=150, n_jobs=7, n_estimators=3000)
+    feat_list = fit_features.test8
+    a.grid_search(score="precision", features=feat_list, n_iter=150, n_jobs=7, n_estimators=5000)

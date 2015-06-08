@@ -35,7 +35,8 @@ def get_fft_features(bidtimes):
     freq_std = np.std(freqs)
     if freq_std == np.nan:
         freq_std = -1
-    return cent, freq_std, spectral_flatness, ptp
+    linfit_m, linfit_b, linfit_r = get_linearfit_features(magnitudes[:10])
+    return cent, freq_std, spectral_flatness, ptp, linfit_m, linfit_b, linfit_r
 
 
 if __name__ == "__main__":

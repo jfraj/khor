@@ -132,8 +132,8 @@ class rfClf(BaseModel):
 
         # ROC curve
         # This ones seems to reflect better the LB score
-        false_pos, true_pos, thr = roc_curve(target_test, predictions)
-        #false_pos, true_pos, thr = roc_curve(target_test, probas[:, 1])
+        #false_pos, true_pos, thr = roc_curve(target_test, predictions)
+        false_pos, true_pos, thr = roc_curve(target_test, probas[:, 1])
         fig_roc = plt.figure()
         plt.plot(false_pos, true_pos,
                  label='ROC curve (area = %0.2f)' % auc(false_pos, true_pos))
@@ -145,16 +145,19 @@ class rfClf(BaseModel):
         plt.title('ROC')
         plt.legend(loc="lower right")
         fig_roc.show()
-
         raw_input('press enter when finished...')
 
 
 if __name__ == "__main__":
     #a = rfClf("data/train.csv", nrows=100)
+    #a = rfClf(saved_pkl='saved_df/test2.pkl')
     a = rfClf("data/train.csv")
     feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
-                 'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62']
-    a.fitNscore(features = feat_list, n_estimators=10000)
+                 'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62',
+                 'fft_linfit_m', 'fft_linfit_b', 'fft_linfit_r']
+    #a.fitNscore(features = feat_list, n_estimators=10000)
+    a.fitNscore(features = feat_list)
+    #a.fitNscore(features = fit_features.test2, **hyperparams.gb_params['test2'])
     #a.submit(features = feat_list, nbids_rows=1000)
     #a.submit(features = feat_list)
     #a.submit(features = fit_features.test2, **hyperparams.rf_params['test2'])

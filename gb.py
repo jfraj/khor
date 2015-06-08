@@ -123,8 +123,8 @@ class gbClf(BaseModel):
 
         # ROC curve
         # This ones seems to reflect better the LB score
-        false_pos, true_pos, thr = roc_curve(target_test, predictions)
-        #false_pos, true_pos, thr = roc_curve(target_test, probas[:, 1])
+        #false_pos, true_pos, thr = roc_curve(target_test, predictions)
+        false_pos, true_pos, thr = roc_curve(target_test, probas[:, 1])
         roc_auc = auc(false_pos, true_pos)
         fig_roc = plt.figure()
         plt.plot(false_pos, true_pos,
@@ -138,6 +138,9 @@ class gbClf(BaseModel):
         plt.legend(loc="lower right")
         fig_roc.show()
         print('ROC_AUC = {}'.format(roc_auc))
+        for ipred, iy,iproba in zip(predictions, target_test, probas[:,1]):
+            if ipred == 1 or iy == 1:
+                print('{}, {} : {}'.format(iproba, iy, ipred))
 
 
         raw_input('press enter when finished...')
@@ -150,8 +153,9 @@ if __name__ == "__main__":
     #a = gbClf(saved_pkl='saved_df/test4.pkl')
     #a.set_model()
     #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
-    #feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
-    #             'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62']
+    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+                 'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62',
+                 'fft_linfit_m', 'fft_linfit_b', 'fft_linfit_r']
     #feat_list = ['nbids', 'lfit_m', 'lfit_b']
     #sub_country_list = ['ctry_us', ]
     #sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
@@ -163,7 +167,7 @@ if __name__ == "__main__":
     #feat_list.append('url_vasstdc27m7nks3')
     #feat_list.append('ipspl1_165')
     #feat_list.append('auc_jqx39')
-    #a.fitNscore(features = feat_list, **hyperparams.gb_params['test3'])
-    #a.fitNscore(features = fit_features.test7, **hyperparams.gb_params['test7'])
+    #a.fitNscore(features = feat_list, **hyperparams.gb_params['test6'])
+    #a.fitNscore(features = fit_features.test8, **hyperparams.gb_params['test8'])
     #a.fitNscore(features = feat_list, n_estimators=10000)
-    a.submit(features = fit_features.test7, **hyperparams.gb_params['test7'])
+    a.submit(features = fit_features.test8, **hyperparams.gb_params['test8'])

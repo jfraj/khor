@@ -97,6 +97,11 @@ test7.extend(get_merch_full_feature_list())
 test7.extend(sub_url_list)
 test7.extend(sub_phone_list)
 
+test8 = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+         'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62',
+         'fft_linfit_m', 'fft_linfit_b', 'fft_linfit_r',
+         'url_vasstdc27m7nks3', 'ipspl1_165', 'auc_jqx39']
+
 
 if __name__ == "__main__":
     #print(get_merchandise_rename_dict())

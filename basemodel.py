@@ -167,12 +167,16 @@ class BaseModel(object):
         if features == 'all' or any("fft" in s for s in features):
             if verbose:
                 print('FFT features...')
-            df['fft_cent'], df['fft_freq_std'], df['fft_sflat'], df['fft_ptp'] =\
+            df['fft_cent'], df['fft_freq_std'], df['fft_sflat'], df['fft_ptp'],\
+            df['fft_linfit_m'], df['fft_linfit_b'], df['fft_linfit_r'] =\
                 zip(*df['bidtimes'].apply(clean.get_fft_features))
             df.loc[:, 'fft_cent'].fillna(-1, inplace=True)
             df.loc[:, 'fft_freq_std'].fillna(-1, inplace=True)
             df.loc[:, 'fft_sflat'].fillna(-1, inplace=True)
             df.loc[:, 'fft_ptp'].fillna(-1, inplace=True)
+            df.loc[:, 'fft_linfit_m'].fillna(-1, inplace=True)
+            df.loc[:, 'fft_linfit_b'].fillna(-1, inplace=True)
+            df.loc[:, 'fft_linfit_r'].fillna(-1, inplace=True)
 
         if features == 'all' or any("nbids" in s for s in features):
             if verbose:
@@ -344,8 +348,11 @@ class BaseModel(object):
 
         # Predict on the test sample
         print('\nPredicting...')
-        predictions = self.learner.predict(df_test[col2fit].values)
-
+        #predictions = self.learner.predict(df_test[col2fit].values)
+        predictions = self.learner.predict_proba(df_test[col2fit].values)
+        #print('pred : {}'.format(predictions))
+        predictions = predictions[:,1]
+        #raw_input('pause...')
         # Write submission
         fsubname = 'submission.csv'
         fsub = open(fsubname, 'w')

@@ -11,6 +11,12 @@ rf_params['test4'] = {'bootstrap': True, 'min_samples_leaf': 8,
                       'max_features': 1.0, 'max_depth': 19,
                       'class_weight': None, 'n_estimators': 10000}
 
+rf_params['test8'] = {'bootstrap': True, 'min_samples_leaf': 14,
+                      'min_samples_split': 1, 'criterion': 'entropy',
+                      'max_features': 0.2, 'max_depth': 15,
+                      'class_weight': None, 'n_estimators': 10000}
+
+
 # Gradient Boosting parameters
 gb_params = {}
 
@@ -37,4 +43,9 @@ gb_params['test6'] = {'learning_rate':0.01 , 'min_samples_leaf': 1,
 gb_params['test7'] = {'learning_rate':0.01, 'min_samples_leaf':13,
                      'subsample':0.5,'min_samples_split':5,
                      'max_features':0.1, 'max_depth':17,
+                     'n_estimators': 30000}
+
+gb_params['test8'] = {'learning_rate':0.01, 'min_samples_leaf':17,
+                     'subsample':1.0,'min_samples_split':23,
+                     'max_features':0.2, 'max_depth':6,
                      'n_estimators': 30000}
