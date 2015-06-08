@@ -4,7 +4,7 @@ import pandas as pd
 
 # sklearn
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.cross_validation import train_test_split
+from sklearn.cross_validation import train_test_split, StratifiedShuffleSplit
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_curve, auc
 
@@ -69,11 +69,22 @@ class rfClf(BaseModel):
         test_size = 0.2  # fraction kept for testing
         rnd_seed = 24  # for reproducibility
 
-        features_train, features_test, target_train, target_test =\
-            train_test_split(self.df_train[col2fit].values,
-                             self.df_train['outcome'].values,
-                             test_size=test_size,
-                             random_state=rnd_seed)
+        #features_train, features_test, target_train, target_test =\
+        #    train_test_split(self.df_train[col2fit].values,
+        #                     self.df_train['outcome'].values,
+        #                     test_size=test_size,
+        #                     random_state=rnd_seed)
+
+        sss = StratifiedShuffleSplit(self.df_train['outcome'].values,
+                                     n_iter=1,
+                                     test_size=test_size,
+                                     random_state=rnd_seed)
+        for train_index, test_index in sss:
+            features_train = self.df_train[col2fit].values[train_index]
+            features_test = self.df_train[col2fit].values[test_index]
+            target_train = self.df_train['outcome'].values[train_index]
+            target_test = self.df_train['outcome'].values[test_index]
+
 
         # Fit Classifier
         self.fitModel(features_train, target_train, **kwargs)
