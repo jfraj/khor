@@ -86,7 +86,16 @@ test4.append('ipspl1_165')
 test4.append('auc_jqx39')
 
 test6 = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
-         'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62']
+         'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62',
+         'url_vasstdc27m7nks3', 'ipspl1_165', 'auc_jqx39']
+
+test7 = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+         'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp',
+         'ipspl1_165', 'auc_jqx39']
+test7.extend(get_ctry_full_feature_list())
+test7.extend(get_merch_full_feature_list())
+test7.extend(sub_url_list)
+test7.extend(sub_phone_list)
 
 
 if __name__ == "__main__":

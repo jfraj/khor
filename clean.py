@@ -24,8 +24,18 @@ def get_fft_features(bidtimes):
     magnitudes = np.abs(np.fft.rfft(bidtimes)/ntimes)
     freqs = np.abs(np.fft.fftfreq(ntimes, 1.0)[:ntimes//2+1])
     cent = np.sum(magnitudes*freqs) / np.sum(magnitudes)
+    if cent == np.nan:
+        cent = -1
     spectral_flatness = scistats.gmean(magnitudes)/np.mean(magnitudes)
-    return cent, np.std(freqs), spectral_flatness, np.ptp(magnitudes)
+    if spectral_flatness == np.nan:
+        spectral_flatness = -1
+    ptp = np.ptp(magnitudes)
+    if ptp == np.nan:
+        ptp = -1
+    freq_std = np.std(freqs)
+    if freq_std == np.nan:
+        freq_std = -1
+    return cent, freq_std, spectral_flatness, ptp
 
 
 if __name__ == "__main__":

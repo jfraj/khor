@@ -169,6 +169,10 @@ class BaseModel(object):
                 print('FFT features...')
             df['fft_cent'], df['fft_freq_std'], df['fft_sflat'], df['fft_ptp'] =\
                 zip(*df['bidtimes'].apply(clean.get_fft_features))
+            df.loc[:, 'fft_cent'].fillna(-1, inplace=True)
+            df.loc[:, 'fft_freq_std'].fillna(-1, inplace=True)
+            df.loc[:, 'fft_sflat'].fillna(-1, inplace=True)
+            df.loc[:, 'fft_ptp'].fillna(-1, inplace=True)
 
         if features == 'all' or any("nbids" in s for s in features):
             if verbose:
@@ -228,7 +232,7 @@ class BaseModel(object):
             for iauc in features:
                 if iauc.find('auc_') != 0:
                     continue
-                print('filling {}'.format(iurl))
+                print('filling {}'.format(iauc))
                 df = self.fill_auction_categories(df, df_bids,
                                                 iauc, verbose=True)
 

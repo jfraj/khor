@@ -150,8 +150,8 @@ if __name__ == "__main__":
     #a = gbClf(saved_pkl='saved_df/test4.pkl')
     #a.set_model()
     #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])
-    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
-                 'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62']
+    #feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+    #             'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62']
     #feat_list = ['nbids', 'lfit_m', 'lfit_b']
     #sub_country_list = ['ctry_us', ]
     #sub_phone_list= ["phone{}".format(x) for x in [119,17,46,62,13,115,122,237,389,528]]
@@ -164,6 +164,6 @@ if __name__ == "__main__":
     #feat_list.append('ipspl1_165')
     #feat_list.append('auc_jqx39')
     #a.fitNscore(features = feat_list, **hyperparams.gb_params['test3'])
-    a.fitNscore(features = fit_features.test6, **hyperparams.gb_params['test6'])
+    #a.fitNscore(features = fit_features.test7, **hyperparams.gb_params['test7'])
     #a.fitNscore(features = feat_list, n_estimators=10000)
-    #a.submit(features = fit_features.test6, **hyperparams.gb_params['test6'])
+    a.submit(features = fit_features.test7, **hyperparams.gb_params['test7'])
