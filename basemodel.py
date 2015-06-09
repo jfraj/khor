@@ -322,6 +322,37 @@ class BaseModel(object):
         self.fitted = True
         print('Done fitting!')
 
+    def get_robot_probas(self, **kwargs):
+        """Return probability array of robot probability."""
+        col2fit = kwargs.get('features')
+        bids_path = kwargs.get('bids_path', 'data/bids.csv')
+        test_path = kwargs.get('test_path', 'data/test.csv')
+
+        # cleaning
+        if not self.iscleaned:
+            print 'Preparing the data...'
+            self.prepare_data(bids_path, **kwargs)
+        print('columns for fit=\n{}'.format(self.df_train.columns))
+
+        # Fit Classifier
+        self.fitModel(self.df_train[col2fit].values,
+                      self.df_train['outcome'].values, **kwargs)
+
+        # Prepare test sample
+        df_test = pd.read_csv(test_path)
+        all_bidders = df_test['bidder_id']
+        print(df_test.columns)
+        df_test = self.prepare_dataframe(df_test, bids_path,
+                                         ignore_clean=True,
+                                         features=col2fit)
+
+        # Predict on the test sample
+        print('\nPredicting...')
+        probas = self.learner.predict_proba(df_test[col2fit].values)
+        return probas[:,1]
+
+
+
     def submit(self, **kwargs):
         """Prepare submission file."""
         col2fit = kwargs.get('features')
@@ -398,4 +429,5 @@ if __name__ == "__main__":
     #print(a.df_train.head())
     #a.prepareNsave(fit_features.test2, save_name='saved_df/test2.pkl')
     #a.prepareNsave(fit_features.test4, save_name='saved_df/test4.pkl')
-    a.prepareNsave(feat_list, save_name='saved_df/deleteme.pkl')
+    a.prepareNsave(fit_features.test8, save_name='saved_df/test8.pkl')
+    #a.prepareNsave(feat_list, save_name='saved_df/deleteme.pkl')

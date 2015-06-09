@@ -161,14 +161,14 @@ class rfClf(BaseModel):
 
 if __name__ == "__main__":
     #a = rfClf("data/train.csv", nrows=100)
-    #a = rfClf(saved_pkl='saved_df/test2.pkl')
-    a = rfClf("data/train.csv")
-    feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
-                 'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62',
-                 'fft_linfit_m', 'fft_linfit_b', 'fft_linfit_r']
+    a = rfClf(saved_pkl='saved_df/test8.pkl')
+    #a = rfClf("data/train.csv")
+    #feat_list = ['nbids', 'lfit_m', 'lfit_b', 'lfit_r',
+    #             'fft_cent', 'fft_freq_std', 'fft_sflat', 'fft_ptp', 'phone62',
+    #             'fft_linfit_m', 'fft_linfit_b', 'fft_linfit_r']
     #a.fitNscore(features = feat_list, n_estimators=10000)
-    a.fitNscore(features = feat_list)
-    #a.fitNscore(features = fit_features.test2, **hyperparams.gb_params['test2'])
+    #a.fitNscore(features = feat_list)
+    a.fitNscore(features = fit_features.test8, **hyperparams.gb_params['test8'])
     #a.submit(features = feat_list, nbids_rows=1000)
     #a.submit(features = feat_list)
-    #a.submit(features = fit_features.test2, **hyperparams.rf_params['test2'])
+    #a.submit(features = fit_features.test8, **hyperparams.rf_params['test8'])

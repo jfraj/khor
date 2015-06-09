@@ -155,8 +155,8 @@ class gbClf(BaseModel):
 
 if __name__ == "__main__":
     #a = gbClf("data/train.csv", nrows=100)
-    a = gbClf("data/train.csv")
-    #a = gbClf(saved_pkl='saved_df/test2.pkl')
+    #a = gbClf("data/train.csv")
+    a = gbClf(saved_pkl='saved_df/test8.pkl')
     #a = gbClf(saved_pkl='saved_df/test4.pkl')
     #a.set_model()
     #a.fitNscore(features = fit_features.test2, **hyperparams.rf_params['test2'])

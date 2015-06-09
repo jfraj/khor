@@ -155,4 +155,4 @@ if __name__ == "__main__":
     #a.learn_curve(nbids_rows=1000000, features=feat_list)
     #a.learn_curve(None, n_jobs=5, features=feat_list, **hyperparams.rf_params['test2'])
     #a.grid_search(nbids_rows=10000, features=feat_list)
-    a.grid_search(score="precision", features=feat_list, n_iter=150, n_jobs=7, n_estimators=5000)
+    a.grid_search(score="roc_auc", features=feat_list, n_iter=150, n_jobs=7, n_estimators=5000)
